@@ -1,0 +1,801 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>The Embedded Rust Book</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+
+        
+    </head>
+    <body class="light">
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">var path_to_root = "";</script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { } 
+            if (theme === null || theme === undefined) { theme = 'light'; }
+            document.body.className = theme;
+            document.querySelector('html').className = theme + ' js';
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <ol class="chapter"><li><a href="intro/introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li><ol class="section"><li><a href="intro/install.html"><strong aria-hidden="true">1.1.</strong> Installation</a></li><li><ol class="section"><li><a href="intro/install/linux.html"><strong aria-hidden="true">1.1.1.</strong> Linux</a></li><li><a href="intro/install/macos.html"><strong aria-hidden="true">1.1.2.</strong> MacOS</a></li><li><a href="intro/install/windows.html"><strong aria-hidden="true">1.1.3.</strong> Windows</a></li><li><a href="intro/install/verify.html"><strong aria-hidden="true">1.1.4.</strong> Verify Installation</a></li></ol></li><li><a href="intro/tooling.html"><strong aria-hidden="true">1.2.</strong> Tooling</a></li><li><a href="intro/hardware.html"><strong aria-hidden="true">1.3.</strong> Hardware</a></li><li><a href="intro/no-std.html"><strong aria-hidden="true">1.4.</strong> no_std</a></li></ol></li><li><a href="blinky/blinky.html"><strong aria-hidden="true">2.</strong> Blinking your first LED</a></li><li><a href="static-guarantees/static-guarantees.html"><strong aria-hidden="true">3.</strong> Static Guarantees</a></li><li><a href="portability/portability.html"><strong aria-hidden="true">4.</strong> Portability</a></li><li><a href="singletons/singletons.html"><strong aria-hidden="true">5.</strong> Singletons</a></li><li><a href="concurrency/concurrency.html"><strong aria-hidden="true">6.</strong> Concurrency</a></li><li><a href="collections/collections.html"><strong aria-hidden="true">7.</strong> Collections</a></li><li><a href="c-tips/c-tips.html"><strong aria-hidden="true">8.</strong> Tips for embedded C developers</a></li><li><a href="interoperability/interoperability.html"><strong aria-hidden="true">9.</strong> Interoperability</a></li><li><ol class="section"><li><a href="interoperability/c-with-rust.html"><strong aria-hidden="true">9.1.</strong> A little C with your Rust</a></li><li><a href="interoperability/rust-with-c.html"><strong aria-hidden="true">9.2.</strong> A little Rust with your C</a></li></ol></li></ol>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar" class="menu-bar">
+                    <div id="menu-bar-sticky-container">
+                        <div class="left-buttons">
+                            <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                                <i class="fa fa-bars"></i>
+                            </button>
+                            <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                                <i class="fa fa-paint-brush"></i>
+                            </button>
+                            <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                                <li role="none"><button role="menuitem" class="theme" id="light">Light <span class="default">(default)</span></button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                            </ul>
+                            
+                            <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                                <i class="fa fa-search"></i>
+                            </button>
+                            
+                        </div>
+
+                        <h1 class="menu-title">The Embedded Rust Book</h1> 
+
+                        <div class="right-buttons">
+                            <a href="print.html" title="Print this book" aria-label="Print this book">
+                                <i id="print-button" class="fa fa-print"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <a class="header" href="#introduction" id="introduction"><h1>Introduction</h1></a>
+<p>Welcome to &quot;The Embedded Rust Book&quot;, an introductory book about using the Rust Programming Language on &quot;Bare Metal&quot; embedded systems, such as Microcontrollers.</p>
+<a class="header" href="#who-embedded-rust-is-for" id="who-embedded-rust-is-for"><h2>Who Embedded Rust is For</h2></a>
+<p><code>TODO</code></p>
+<a class="header" href="#who-this-book-is-for" id="who-this-book-is-for"><h2>Who This Book is For</h2></a>
+<p>This book assumes the following:</p>
+<ul>
+<li>You are comfortable using the Rust Programming Language, and have written, run, and debugged Rust applications on a desktop environment</li>
+<li>You are comfortable developing and debugging embedded systems in another language such as C, C++, or Ada, and are familiar with concepts such as:
+<ul>
+<li>Cross Compilation</li>
+<li>Linker Scripts</li>
+<li>Memory Mapped Peripherals</li>
+<li>Interrupts</li>
+<li>Common interfaces such as I2C, SPI, Serial, and others</li>
+</ul>
+</li>
+</ul>
+<p>If you are not yet comfortable with Rust, we highly suggest completing the <a href="https://doc.rust-lang.org/book/second-edition">Rust Book</a> before attempting to learn with this book.</p>
+<p>If you are not yet comfortable with Embedded Systems, we highly suggest <code>LEARNING WITH OTHER RESOURCES</code> before attempting to learn with this book.</p>
+<a class="header" href="#how-to-use-this-book" id="how-to-use-this-book"><h2>How to Use This Book</h2></a>
+<p>This book generally assumes that you’re reading it front-to-back, that is, later chapters build on top of concepts in earlier chapters, and earlier chapters may not dig into details on a topic, revisiting the topic in a later chapter.</p>
+<p>This book will be using the <a href="http://www.st.com/en/evaluation-tools/stm32f3discovery.html">STMF3DISCOVERY</a> development board from STMicroelectronics for the majority of the examples contained within. This board is based on the ARM Cortex-M architecture, and while basic functionality is common across most CPUs based on this architecture, peripherals and other implementation details of Microcontrollers are different between different vendors, and often even different between Microcontroller families from the same vendor.</p>
+<p>For this reason, we suggest purchasing the <a href="http://www.st.com/en/evaluation-tools/stm32f3discovery.html">STMF3DISCOVERY</a> development board for the purpose of following this book.</p>
+<a class="header" href="#contributing-to-this-book" id="contributing-to-this-book"><h2>Contributing to This Book</h2></a>
+<p>Until the initial release of this book (planned to coincide with the 2018 Era release of the Rust Programming Language), the work on this book will be coordinated in <a href="https://github.com/rust-lang-nursery/embedded-wg/issues/56">this tracking issue</a> of the <a href="https://github.com/rust-lang-nursery/embedded-wg">Embedded Working Group</a> repository.</p>
+<p>Pull requests are very welcome.</p>
+<blockquote>
+<p><strong>⚠️: This section contains exports from <a href="https://japaric.github.io/discovery/">Japaric's Discovery</a> book.</strong></p>
+<p>Contents should be reviewed for consistency in the context
+of this book before &quot;publishing&quot;</p>
+</blockquote>
+<blockquote>
+<p><strong>⚠️: This section still references <code>nightly</code> Rust</strong></p>
+<p>Contents should be updated to work on <code>stable</code> Rust when possible</p>
+</blockquote>
+<blockquote>
+<p><strong>⚠️: This section has not been checked as of 2018-07-29</strong></p>
+<p>Contents should be checked to still be working with current <code>nightly</code>
+or <code>stable</code> Rust</p>
+</blockquote>
+<a class="header" href="#setting-up-a-development-environment" id="setting-up-a-development-environment"><h1>Setting up a development environment</h1></a>
+<p>Dealing with microcontrollers involves several tools as we'll be dealing with an architecture
+different than your laptop's and we'll have to run and debug programs on a &quot;remote&quot; device.</p>
+<a class="header" href="#documentation" id="documentation"><h2>Documentation</h2></a>
+<p>Tooling is not everything though. Without documentation is pretty much impossible to work with microcontrollers.</p>
+<p>We'll be referring to all these documents throughout this book:</p>
+<p><em>HEADS UP</em> All these links point to PDF files and some of them are hundreds of pages long and
+several MBs in size.</p>
+<ul>
+<li><a href="http://www.st.com/resource/en/user_manual/dm00063382.pdf">STM32F3DISCOVERY User Manual</a></li>
+<li><a href="http://www.st.com/resource/en/datasheet/stm32f303vc.pdf">STM32F303VC Datasheet</a></li>
+<li><a href="http://www.st.com/resource/en/reference_manual/dm00043574.pdf">STM32F303VC Reference Manual</a></li>
+<li><a href="http://www.st.com/resource/en/datasheet/lsm303dlhc.pdf">LSM303DLHC</a></li>
+<li><a href="http://www.st.com/resource/en/datasheet/l3gd20.pdf">L3GD20</a></li>
+</ul>
+<a class="header" href="#tools" id="tools"><h2>Tools</h2></a>
+<p>We'll use all the tools listed below. Where a minimum version is not specified, any recent version should work but we have listed the version we have tested.</p>
+<ul>
+<li>
+<p>Cargo &amp; <code>rustc</code> &gt;= nightly-2018-06-04</p>
+</li>
+<li>
+<p><a href="https://crates.io/crates/itm"><code>itmdump</code></a> v0.2.1</p>
+</li>
+<li>
+<p>OpenOCD &gt;=0.8. Tested versions: v0.9.0 and v0.10.0</p>
+</li>
+<li>
+<p><code>arm-none-eabi-gcc</code>. Tested version: ?.??</p>
+</li>
+<li>
+<p><code>arm-none-eabi-binutils</code></p>
+<ul>
+<li><code>arm-none-eabi-ld</code>. Tested version: 2.30</li>
+<li><code>arm-none-eabi-gdb</code>. Version 7.12 or newer highly recommended. Tested versions: 7.10, 7.11,
+7.12 and 8.1</li>
+</ul>
+</li>
+<li>
+<p><code>minicom</code> on Linux and macOS. Tested version: 2.7. Readers report that <code>picocom</code> also works but
+we'll use <code>minicom</code> in this text.</p>
+</li>
+<li>
+<p><code>PuTTY</code> on Windows.</p>
+</li>
+</ul>
+<p>Next, follow OS-agnostic installation instructions for a few of the tools:</p>
+<a class="header" href="#rustc--cargo" id="rustc--cargo"><h3><code>rustc</code> &amp; Cargo</h3></a>
+<p>Install rustup by following the instructions at <a href="https://rustup.rs">https://rustup.rs</a>.</p>
+<p>Then, install or switch to the nightly channel.</p>
+<pre><code class="language-console">$ rustup default nightly
+</code></pre>
+<p><strong>NOTE</strong> Make sure you have a nightly newer than <code>nightly-2018-06-04</code>. <code>rustc -V</code> should return a
+date newer than the one shown below:</p>
+<pre><code class="language-console">$ rustc -V
+rustc 1.28.0-nightly (29f48ccf3 2018-06-03)
+</code></pre>
+<a class="header" href="#itmdump" id="itmdump"><h3><code>itmdump</code></h3></a>
+<pre><code class="language-console">$ cargo install itm --vers 0.2.1
+</code></pre>
+<a class="header" href="#os-specific-instructions" id="os-specific-instructions"><h3>OS specific instructions</h3></a>
+<p>Now follow the instructions specific to the OS you are using:</p>
+<ul>
+<li><a href="/intro/install/linux.html">Linux</a></li>
+<li><a href="/intro/install/windows.html">Windows</a></li>
+<li><a href="/intro/install/macos.html">macOS</a></li>
+</ul>
+<blockquote>
+<p><strong>⚠️: This section contains exports from <a href="https://japaric.github.io/discovery/">Japaric's Discovery</a> book.</strong></p>
+<p>Contents should be reviewed for consistency in the context
+of this book before &quot;publishing&quot;</p>
+</blockquote>
+<blockquote>
+<p><strong>⚠️: This section has not been checked as of 2018-07-29</strong></p>
+<p>Contents should be checked to still be working with current <code>nightly</code>
+or <code>stable</code> Rust</p>
+</blockquote>
+<a class="header" href="#linux" id="linux"><h1>Linux</h1></a>
+<p>Here are the installation commands for a few Linux distributions.</p>
+<a class="header" href="#required-packages" id="required-packages"><h2>REQUIRED packages</h2></a>
+<ul>
+<li>Ubuntu 16.04 or newer / Debian Jessie or newer</li>
+</ul>
+<pre><code class="language-console">$ sudo apt-get install \
+  binutils-arm-none-eabi \
+  gdb-arm-none-eabi \
+  minicom \
+  openocd
+</code></pre>
+<ul>
+<li>Fedora 23 or newer</li>
+</ul>
+<pre><code class="language-console">$ sudo dnf install \
+  arm-none-eabi-gcc-cs \
+  arm-none-eabi-gdb \
+  minicom \
+  openocd
+</code></pre>
+<ul>
+<li>Arch Linux</li>
+</ul>
+<pre><code class="language-console">$ sudo pacman -S \
+  arm-none-eabi-gcc \
+  arm-none-eabi-gdb \
+  arm-none-eabi-gcc \
+  minicom
+
+$ yaourt -S openocd
+</code></pre>
+<a class="header" href="#udev-rules" id="udev-rules"><h2>udev rules</h2></a>
+<p>These rules let you use USB devices like the F3 and the Serial module without root privilege, i.e.
+<code>sudo</code>.</p>
+<p>Create these two files in <code>/etc/udev/rules.d</code> with the contents shown below.</p>
+<pre><code class="language-console">$ cat /etc/udev/rules.d/99-ftdi.rules
+</code></pre>
+<pre><code class="language-text"># FT232 - USB &lt;-&gt; Serial Converter
+ATTRS{idVendor}==&quot;0403&quot;, ATTRS{idProduct}==&quot;6001&quot;, GROUP=&quot;uucp&quot;
+</code></pre>
+<pre><code class="language-console">$ cat /etc/udev/rules.d/99-openocd.rules
+</code></pre>
+<pre><code class="language-text"># STM32F3DISCOVERY rev A/B - ST-LINK/V2
+ATTRS{idVendor}==&quot;0483&quot;, ATTRS{idProduct}==&quot;3748&quot;, GROUP=&quot;uucp&quot;
+
+# STM32F3DISCOVERY rev C+ - ST-LINK/V2-1
+ATTRS{idVendor}==&quot;0483&quot;, ATTRS{idProduct}==&quot;374b&quot;, GROUP=&quot;uucp&quot;
+</code></pre>
+<p>Then reload the udev rules with:</p>
+<pre><code class="language-console">$ sudo udevadm control --reload-rules
+</code></pre>
+<p>If you had any board plugged to your laptop, unplug them and then plug them in again.</p>
+<p>Finally, check if you are in the <code>uucp</code> group.</p>
+<pre><code class="language-console">$ groups $(id -nu)
+(..) uucp (..)
+$ #  ^^^^
+</code></pre>
+<p>(<code>$(id -nu)</code> returns your user name. In my case it's <code>japaric</code>.)</p>
+<p>If <code>uucp</code> appears in the output. You are all set! Go to the <a href="/intro/install/verify.html">next section</a>. Otherwise, keep reading:</p>
+<ul>
+<li>Add yourself to the <code>uucp</code> group.</li>
+</ul>
+<pre><code class="language-console">$ sudo usermod -a -G uucp $(id -u -n)
+</code></pre>
+<ul>
+<li>Check again the output of <code>groups</code>. <code>uucp</code> should be there this time!</li>
+</ul>
+<pre><code class="language-console">$ groups $(id -nu)
+(..) uucp (..)
+$ #  ^^^^
+</code></pre>
+<p>You'll have to re-log for these changes to take effect. You have two options:</p>
+<p>You can reboot or log out from your current session and then log in; this will close all the
+programs you have open right now.</p>
+<p>The other option is to use the command below:</p>
+<pre><code class="language-console">$ su - $(id -nu)
+</code></pre>
+<p>to re-log <em>only in the current shell</em> and get access to <code>uucp</code> devices <em>only on that shell</em>. Other
+shells <em>won't</em> have access to <code>uucp</code> devices unless you manually re-log on them with the same <code>su</code>
+command.</p>
+<p>Now, go to the <a href="/intro/install/verify.html">next section</a>.</p>
+<blockquote>
+<p><strong>⚠️: This section contains exports from <a href="https://japaric.github.io/discovery/">Japaric's Discovery</a> book.</strong></p>
+<p>Contents should be reviewed for consistency in the context
+of this book before &quot;publishing&quot;</p>
+</blockquote>
+<blockquote>
+<p><strong>⚠️: This section has not been checked as of 2018-07-29</strong></p>
+<p>Contents should be checked to still be working with current <code>nightly</code>
+or <code>stable</code> Rust</p>
+</blockquote>
+<a class="header" href="#macos" id="macos"><h1>MacOS</h1></a>
+<p>All the tools can be install using <a href="http://brew.sh/">Homebrew</a>:</p>
+<pre><code class="language-console">$ brew cask install gcc-arm-embedded
+$ brew install minicom openocd
+</code></pre>
+<p>If the <code>brew cask</code> command doesn't work (<code>Error: Unknown command: cask</code>), then run <code>brew tap Caskroom/tap</code> first and try again.</p>
+<p>That's all! Go to the <a href="/intro/install/verify.html">next section</a>.</p>
+<blockquote>
+<p><strong>⚠️: This section contains exports from <a href="https://japaric.github.io/discovery/">Japaric's Discovery</a> book.</strong></p>
+<p>Contents should be reviewed for consistency in the context
+of this book before &quot;publishing&quot;</p>
+</blockquote>
+<blockquote>
+<p><strong>⚠️: This section has not been checked as of 2018-07-29</strong></p>
+<p>Contents should be checked to still be working with current <code>nightly</code>
+or <code>stable</code> Rust</p>
+</blockquote>
+<a class="header" href="#windows" id="windows"><h1>Windows</h1></a>
+<a class="header" href="#arm-none-eabi-" id="arm-none-eabi-"><h2><code>arm-none-eabi-*</code></h2></a>
+<p>ARM provides <code>.exe</code> installers for Windows. Grab one from <a href="https://developer.arm.com/open-source/gnu-toolchain/gnu-rm/downloads">here</a>, and follow the instructions.
+Just before the installation process finishes tick/select the &quot;Add path to environment variable&quot;
+option. Then verify that the tools are in your <code>%PATH%</code>:</p>
+<pre><code class="language-console">$ arm-none-eabi-gcc -v
+(..)
+gcc version 5.4.1 20160919 (release) (..)
+</code></pre>
+<a class="header" href="#openocd" id="openocd"><h2>OpenOCD</h2></a>
+<p>There's no official binary release of OpenOCD for Windows but there are unofficial releases
+available <a href="https://github.com/gnu-mcu-eclipse/openocd/releases">here</a>. Grab the 0.10.x zipfile and extract it somewhere in your drive (I
+recommend <code>C:\OpenOCD</code> but with the drive letter that makes sense to you) then update your <code>%PATH%</code>
+environment variable to include the following path: <code>C:\OpenOCD\bin</code> (or the path that you used
+before).</p>
+<p>Verify that OpenOCD is in yout <code>%PATH%</code> with:</p>
+<pre><code class="language-console">$ openocd -v
+Open On-Chip Debugger 0.10.0
+(..)
+</code></pre>
+<a class="header" href="#putty" id="putty"><h2>PuTTY</h2></a>
+<p>Download the latest <code>putty.exe</code> from <a href="http://www.chiark.greenend.org.uk/%7Esgtatham/putty/download.html">this site</a> and place it somewhere in your <code>%PATH%</code>.</p>
+<a class="header" href="#st-link-usb-driver" id="st-link-usb-driver"><h2>ST-LINK USB driver</h2></a>
+<p>You'll also need to install <a href="http://www.st.com/en/embedded-software/stsw-link009.html">this USB driver</a> or OpenOCD won't work. Follow the installer
+instructions and make sure you install the right (32-bit or 64-bit) version of the driver.</p>
+<p>That's all! Go to the <a href="/intro/install/verify.html">next section</a>.</p>
+<a class="header" href="#verify-installation" id="verify-installation"><h1>Verify Installation</h1></a>
+<a class="header" href="#tooling" id="tooling"><h1>Tooling</h1></a>
+<blockquote>
+<p>❌: <strong>This section should cover:</strong></p>
+<ul>
+<li>Basically explaining all the tools we installed in the previous chapter, what they are used for, etc.</li>
+</ul>
+</blockquote>
+<a class="header" href="#rustc" id="rustc"><h2>rustc</h2></a>
+<p>What is this, what is it used for, and why are we using this tool?</p>
+<a class="header" href="#cargo" id="cargo"><h2>Cargo</h2></a>
+<p>What is this, what is it used for, and why are we using this tool?</p>
+<a class="header" href="#itmdump-1" id="itmdump-1"><h2>itmdump</h2></a>
+<p>What is this, what is it used for, and why are we using this tool?</p>
+<a class="header" href="#openocd-1" id="openocd-1"><h2>OpenOCD</h2></a>
+<p>What is this, what is it used for, and why are we using this tool?</p>
+<a class="header" href="#arm-none-eabi-gcc" id="arm-none-eabi-gcc"><h2>arm-none-eabi-gcc</h2></a>
+<p>What is this, what is it used for, and why are we using this tool?</p>
+<a class="header" href="#arm-none-eabi-ld" id="arm-none-eabi-ld"><h2>arm-none-eabi-ld</h2></a>
+<p>What is this, what is it used for, and why are we using this tool?</p>
+<a class="header" href="#arm-none-eabi-gdb" id="arm-none-eabi-gdb"><h2>arm-none-eabi-gdb</h2></a>
+<p>What is this, what is it used for, and why are we using this tool?</p>
+<a class="header" href="#minicom--putty" id="minicom--putty"><h2>minicom / putty</h2></a>
+<p>What is this, what is it used for, and why are we using this tool?</p>
+<blockquote>
+<p><strong>⚠️: This section contains exports from <a href="https://japaric.github.io/discovery/">Japaric's Discovery</a> book.</strong></p>
+<p>Contents should be reviewed for consistency in the context
+of this book before &quot;publishing&quot;</p>
+</blockquote>
+<a class="header" href="#meet-your-hardware" id="meet-your-hardware"><h1>Meet your hardware</h1></a>
+<p>Let's get familiar with the hardware we'll be working with.</p>
+<a class="header" href="#stm32f3discovery-the-f3" id="stm32f3discovery-the-f3"><h2>STM32F3DISCOVERY (the &quot;F3&quot;)</h2></a>
+<p align="center">
+<img title="F3" src="/book/assets/f3.jpg">
+</p>
+<p>We'll refer to this board as &quot;F3&quot; throughout this book.</p>
+<p>What does this board contain?</p>
+<ul>
+<li>
+<p>A STM32F303VCT6 microcontroller. This microcontroller has</p>
+<ul>
+<li>
+<p>A single core ARM Cortex-M4F processor with hardware support for single precision floating point
+operations and a maximum clock frequency of 72 MHz.</p>
+</li>
+<li>
+<p>256 KiB of &quot;Flash&quot; memory. (1 KiB = 10<strong>24</strong> bytes)</p>
+</li>
+<li>
+<p>48 KiB of RAM.</p>
+</li>
+<li>
+<p>many &quot;peripherals&quot;: timers, GPIO, I2C, SPI, USART, etc.</p>
+</li>
+<li>
+<p>lots of &quot;pins&quot; that are exposed in the two lateral &quot;headers&quot;.</p>
+</li>
+<li>
+<p><strong>IMPORTANT</strong> This microcontroller operates at (around) 3.3V.</p>
+</li>
+</ul>
+</li>
+<li>
+<p>An <a href="https://en.wikipedia.org/wiki/Accelerometer">accelerometer</a> and a <a href="https://en.wikipedia.org/wiki/Magnetometer">magnetometer</a> (in a single package).</p>
+</li>
+</ul>
+<ul>
+<li>A <a href="https://en.wikipedia.org/wiki/Gyroscope">gyroscope</a>.</li>
+</ul>
+<ul>
+<li>
+<p>8 user LEDs arranged in the shape of a compass</p>
+</li>
+<li>
+<p>A second microcontroller: a STM32F103CBT. This microcontroller is actually part of an on-board
+programmer and debugger named ST-LINK and is connected to the USB port named &quot;USB ST-LINK&quot;.</p>
+</li>
+<li>
+<p>There's a second USB port, labeled &quot;USB USER&quot; that is connected to the main microcontroller, the
+STM32F303VCT6, and can be used in applications.</p>
+</li>
+</ul>
+<a class="header" href="#a-no_std-rust-environment" id="a-no_std-rust-environment"><h1>A <code>no_std</code> Rust Environment</h1></a>
+<p>The term Embedded Programming is used for a wide range of different classes of programming.
+Ranging from programming 8 Bit MCUs (like <a href="https://www.st.com/resource/en/datasheet/st72325j6.pdf">ST72325xx</a>) with just a few KB of RAM and ROM, up to systems like
+the Raspberry Pi (<a href="https://en.wikipedia.org/wiki/Raspberry_Pi#Specifications">Model B 3+</a>) which has a 32/64-bit 4-core Cortex-A53 @ 1.4 GHz and 1GB of RAM.
+Different restrictions/limitations will apply when writing code depending on what kind of target and use case you have.</p>
+<p>There are two general Embedded Programming classifications:</p>
+<a class="header" href="#hosted-environments" id="hosted-environments"><h2>Hosted Environments</h2></a>
+<p>These kinds of environments feel pretty close to a normal PC environment.
+What this means is you are provided with a System Interface <a href="https://en.wikipedia.org/wiki/POSIX">E.G. POSIX</a>
+that provides you with primitives to interact with various systems, such as file systems, networking, memory management, threads, etc.
+Standard libraries in turn usually depend on these primitives to implement their functionality.
+You may also have some sort of sysroot and restrictions on RAM/ROM-usage, and perhaps some
+special HW or I/Os. Overall it feels like coding in a special-purpose PC environment.</p>
+<a class="header" href="#bare-metal-environments" id="bare-metal-environments"><h2>Bare Metal Environments</h2></a>
+<p>In a bare metal environment there will be no high level OS running and hosting our code.
+This means there will be no primitives, which means there's also no standard library by default.
+By marking our code with <code>no_std</code> we indicate that our code is capable of running in such an environment.
+This means the rust <a href="https://doc.rust-lang.org/std/">stdlib</a> and dynamic memory allocation can't be used by such code.
+However, such code can use <a href="https://doc.rust-lang.org/core/">libcore</a>, which can easily be made available
+in any kind of environment by providing just a few symbols (for details see <a href="https://doc.rust-lang.org/core/">libcore</a>).</p>
+<a class="header" href="#summary" id="summary"><h2>Summary</h2></a>
+<p>What implications does <code>no_std</code> Rust Environment have on the code:</p>
+<ul>
+<li>No Standard Library</li>
+<li>No Dynamic Memory allocation</li>
+</ul>
+<a class="header" href="#see-also" id="see-also"><h2>See also</h2></a>
+<ul>
+<li><a href="https://www.rust-lang.org/en-US/faq.html#does-rust-work-without-the-standard-library">FAQ</a></li>
+<li><a href="https://github.com/rust-lang/rfcs/blob/master/text/1184-stabilize-no_std.md">RFC-1184</a></li>
+</ul>
+<a class="header" href="#blinking-your-first-led" id="blinking-your-first-led"><h1>Blinking your first LED</h1></a>
+<blockquote>
+<p>❌: This section has not yet been written. Please refer to <a href="https://github.com/rust-lang-nursery/embedded-wg/issues/117">embedded-wg#117</a> for discussion of this section.</p>
+</blockquote>
+<a class="header" href="#static-guarantees" id="static-guarantees"><h1>Static Guarantees</h1></a>
+<blockquote>
+<p>❌: This section has not yet been written. Please refer to <a href="https://github.com/rust-lang-nursery/embedded-wg/issues/118">embedded-wg#817</a> for discussion of this section.</p>
+</blockquote>
+<a class="header" href="#portability" id="portability"><h1>Portability</h1></a>
+<blockquote>
+<p>❌: This section has not yet been written. Please refer to <a href="https://github.com/rust-lang-nursery/embedded-wg/issues/119">embedded-wg#119</a> for discussion of this section.</p>
+</blockquote>
+<a class="header" href="#singletons" id="singletons"><h1>Singletons</h1></a>
+<blockquote>
+<p>I see quite a bit of overlap between singletons and the &quot;static guarantess&quot; and &quot;dynamic data structures&quot; sections. It may be best to write those two first and the decide whether we want a standalone section on singletons (I think a standalone section would end up being too short and / or may not properly showcase its usefulness without applying it to something like configuration or memory management).</p>
+<ul>
+<li>@japaric</li>
+</ul>
+</blockquote>
+<a class="header" href="#concurrency" id="concurrency"><h1>Concurrency</h1></a>
+<blockquote>
+<p>❌: This section has not yet been written. Please refer to <a href="https://github.com/rust-lang-nursery/embedded-wg/issues/124">embedded-wg#124</a> for discussion of this section.</p>
+</blockquote>
+<a class="header" href="#collections" id="collections"><h1>Collections</h1></a>
+<p>Eventually you'll want to use dynamic data structures (AKA collections) in your
+program. <code>std</code> provides a set of common collections: <a href="https://doc.rust-lang.org/std/vec/struct.Vec.html"><code>Vec</code></a>, <a href="https://doc.rust-lang.org/std/string/struct.String.html"><code>String</code></a>,
+<a href="https://doc.rust-lang.org/std/collections/struct.HashMap.html"><code>HashMap</code></a>, etc. All the collections implemented in <code>std</code> use a global dynamic
+memory allocator (AKA the heap).</p>
+<p>As <code>core</code> is, by definition, free of memory allocations these implementations
+are not available there, but they can be found in the <em>unstable</em> <code>alloc</code> crate
+that's shipped with the compiler.</p>
+<p>If you need collections, a heap allocated implementation is not your only
+option. You can also use <em>fixed capacity</em> collections; one such implementation
+can be found in the <a href="https://crates.io/crates/heapless"><code>heapless</code></a> crate.</p>
+<p>In this section, we'll explore and compare these two implementations.</p>
+<a class="header" href="#using-alloc" id="using-alloc"><h2>Using <code>alloc</code></h2></a>
+<p>The <code>alloc</code> crate is shipped with the standard Rust distribution. To import the
+crate you can directly <code>use</code> it <em>without</em> declaring it as a dependency in your
+<code>Cargo.toml</code> file.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#![feature(alloc)]
+
+#fn main() {
+extern crate alloc;
+
+use alloc::vec::Vec;
+#}</code></pre></pre>
+<p>To be able to use any collection you'll first need use the <code>global_allocator</code>
+attribute to declare the global allocator your program will use. It's required
+that the allocator you select implements the <a href="https://doc.rust-lang.org/core/alloc/trait.GlobalAlloc.html"><code>GlobalAlloc</code></a> trait.</p>
+<p>For completeness and to keep this section as self-contained as possible we'll
+implement a simple bump pointer allocator and use that as the global allocator.
+However, we <em>strongly</em> suggest you use a battle tested allocator from crates.io
+in your program instead of this allocator.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+// Bump pointer allocator implementation
+
+extern crate cortex_m;
+
+use core::alloc::GlobalAlloc;
+use core::ptr;
+
+use cortex_m::interrupt;
+
+// Bump pointer allocator for *single* core systems
+struct BumpPointerAlloc {
+    head: UnsafeCell&lt;usize&gt;,
+    end: usize,
+}
+
+unsafe impl Sync for BumpPointerAlloc {}
+
+unsafe impl GlobalAlloc for BumpPointerAlloc {
+    unsafe fn alloc(&amp;self, layout: Layout) -&gt; *mut u8 {
+        // `interrupt::free` is a critical section that makes our allocator safe
+        // to use from within interrupts
+        interrupt::free(|_| {
+            let head = self.head.get();
+
+            let align = layout.align();
+            let res = *head % align;
+            let start = if res == 0 { *head } else { *head + align - res };
+            if start + align &gt; self.end {
+                // a null pointer signal an Out Of Memory condition
+                ptr::null_mut()
+            } else {
+                *head = start + align;
+                start as *mut u8
+            }
+        })
+    }
+
+    unsafe fn dealloc(&amp;self, _: *mut u8, _: Layout) {
+        // this allocator never deallocates memory
+    }
+}
+
+// Declaration of the global memory allocator
+// NOTE the user must ensure that the memory region `[0x2000_0100, 0x2000_0200]`
+// is not used by other parts of the program
+#[global_allocator]
+static HEAP: BumpPointerAlloc = BumpPointerAlloc {
+    head: UnsafeCell::new(0x2000_0100),
+    end: 0x2000_0200,
+};
+#}</code></pre></pre>
+<p>Apart from selecting a global allocator the user will also have to define how
+Out Of Memory (OOM) errors are handled using the <em>unstable</em>
+<code>alloc_error_handler</code> attribute.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#![feature(alloc_error_handler)]
+
+#fn main() {
+use cortex_m::asm;
+
+#[alloc_error_handler]
+fn on_oom(_layout: Layout) -&gt; ! {
+    asm::bkpt();
+
+    loop {}
+}
+#}</code></pre></pre>
+<p>Once all that is in place, the user can finally use the collections in <code>alloc</code>.</p>
+<pre><pre class="playpen"><code class="language-rust">#[entry]
+fn main() -&gt; ! {
+    let mut xs = Vec::new();
+
+    xs.push(42);
+    assert!(xs.pop(), Some(42));
+
+    loop {
+        // ..
+    }
+}
+</code></pre></pre>
+<p>If you have used the collections in the <code>std</code> crate then these will be familiar
+as they are exact same implementation.</p>
+<a class="header" href="#using-heapless" id="using-heapless"><h2>Using <code>heapless</code></h2></a>
+<p><code>heapless</code> requires no setup as its collections don't depend on a global memory
+allocator. Just <code>use</code> its collections and proceed to instantiate them:</p>
+<pre><pre class="playpen"><code class="language-rust">extern crate heapless; // v0.4.x
+
+use heapless::Vec;
+use heapless::consts::*;
+
+#[entry]
+fn main() -&gt; ! {
+    let mut xs: Vec&lt;_, U8&gt; = Vec::new();
+
+    xs.push(42).unwrap();
+    assert_eq!(xs.pop(), Some(42));
+}
+</code></pre></pre>
+<p>You'll note two differences between these collections and the ones in <code>alloc</code>.</p>
+<p>First, you have to declare upfront the capacity of the collection. <code>heapless</code>
+collections never reallocate and have fixed capacities; this capacity is part of
+the type signature of the collection. In this case we have declared that <code>xs</code>
+has a capacity of 8 elements that is the vector can, at most, hold 8 elements.
+This is indicated by the <code>U8</code> (see <a href="https://crates.io/crates/typenum"><code>typenum</code></a>) in the type signature.</p>
+<p>Second, the <code>push</code> method, and many other methods, return a <code>Result</code>. Since the
+<code>heapless</code> collections have fixed capacity all operations that insert elements
+into the collection can potentially fail. The API reflects this problem by
+returning a <code>Result</code> indicating whether the operation succeeded or not. In
+contrast, <code>alloc</code> collections will reallocate themselves on the heap to increase
+their capacity.</p>
+<p>As of version v0.4.x all <code>heapless</code> collections store all their elements inline.
+This means that an operation like <code>let x = heapless::Vec::new();</code> will allocate
+the collection on the stack, but it's also possible to allocate the collection
+on a <code>static</code> variable, or even on the heap (<code>Box&lt;Vec&lt;_, _&gt;&gt;</code>).</p>
+<a class="header" href="#trade-offs" id="trade-offs"><h2>Trade-offs</h2></a>
+<p>Keep these in mind when choosing between heap allocated, relocatable collections
+and fixed capacity collections.</p>
+<a class="header" href="#out-of-memory-and-error-handling" id="out-of-memory-and-error-handling"><h3>Out Of Memory and error handling</h3></a>
+<p>With heap allocations Out Of Memory is always a possibility and can occur in
+any place where a collection may need to grow: for example, all
+<code>alloc::Vec.push</code> invocations can potentially generate an OOM condition. Thus
+some operations can <em>implicitly</em> fail. Some <code>alloc</code> collections expose
+<code>try_reserve</code> methods that let you check for potential OOM conditions when
+growing the collection but you need be proactive about using them.</p>
+<p>If you exclusively use <code>heapless</code> collections and you don't use a memory
+allocator for anything else then an OOM condition is impossible. Instead, you'll
+have to deal with collections running out of capacity on a case by case basis.
+That is you'll have deal with <em>all</em> the <code>Result</code>s returned by methods like
+<code>Vec.push</code>.</p>
+<p>OOM failures can be harder to debug than say <code>unwrap</code>-ing on all <code>Result</code>s
+returned by <code>heapless::Vec.push</code> because the observed location of failure may
+<em>not</em> match with the location of the cause of the problem. For example, even
+<code>vec.reserve(1)</code> can trigger an OOM if the allocator is nearly exhausted because
+some other collection was leaking memory (memory leaks are possible in safe
+Rust).</p>
+<a class="header" href="#memory-usage" id="memory-usage"><h3>Memory usage</h3></a>
+<p>Reasoning about memory usage of heap allocated collections is hard because the
+capacity of long lived collections can change at runtime. Some operations may
+implicitly reallocate the collection increasing its memory usage, and some
+collections expose methods like <code>shrink_to_fit</code> that can potentially reduce the
+memory used by the collection -- ultimately, it's up to the allocator to decide
+whether to actually shrink the memory allocation or not. Additionally, the
+allocator may have to deal with memory fragmentation which can increase the
+<em>apparent</em> memory usage.</p>
+<p>On the other hand if you exclusively use fixed capacity collections, store
+most of them in <code>static</code> variables and set a maximum size for the call stack
+then the linker will detect if you try to use more memory than what's physically
+available.</p>
+<p>Furthermore, fixed capacity collections allocated on the stack will be reported
+by [<code>-Z emit-stack-sizes</code>] flag which means that tools that analyze stack usage
+will include them in their analysis.</p>
+<!-- [`-Z emit-stack-sizes`]: TODO add link to the unstable book -->
+<p>However, fixed capacity collections can <em>not</em> be shrunk which can result in
+lower load factors (the ratio between the size of the collection and its
+capacity) than what relocatable collections can achieve.</p>
+<a class="header" href="#worst-case-execution-time-wcet" id="worst-case-execution-time-wcet"><h3>Worst Case Execution Time (WCET)</h3></a>
+<p>If are building time sensitive applications or hard real time applications then
+you care, maybe a lot, about the worst case execution time of the different
+parts of your program.</p>
+<p>The <code>alloc</code> collections can reallocate so the WCET of operations that may grow
+the collection will also include the time it takes to reallocate the collection,
+which itself depends on the <em>runtime</em> capacity of the collection. This makes it
+hard to determine the WCET of, for example, the <code>alloc::Vec.push</code> operation as
+it depends on both the allocator being used and its runtime capacity.</p>
+<p>On the other hand fixed capacity collections never reallocate so all operations
+have a predictable execution time. For example, <code>heapless::Vec.push</code> executes in
+constant time.</p>
+<a class="header" href="#ease-of-use" id="ease-of-use"><h3>Ease of use</h3></a>
+<p><code>alloc</code> requires setting up a global allocator whereas <code>heapless</code> does not.
+However, <code>heapless</code> requires you to pick the capacity of each collection that
+you instantiate.</p>
+<p>The <code>alloc</code> API will be familiar to virtually every Rust developer. The
+<code>heapless</code> API tries to closely mimic the <code>alloc</code> API but it will never be
+exactly the same due to its explicit error handling -- some developers may feel
+the explicit error handling is excessive or too cumbersome.</p>
+<a class="header" href="#tips-for-embedded-c-developers" id="tips-for-embedded-c-developers"><h1>Tips for embedded C developers</h1></a>
+<blockquote>
+<p>❌: This section has not yet been written. Please refer to <a href="https://github.com/rust-lang-nursery/embedded-wg/issues/126">embedded-wg#126</a> for discussion of this section.</p>
+</blockquote>
+<a class="header" href="#interoperability" id="interoperability"><h1>Interoperability</h1></a>
+<blockquote>
+<p>❌: This section has not yet been written. Please refer to <a href="https://github.com/rust-lang-nursery/embedded-wg/issues/48">embedded-wg#48</a> for discussion of this section.</p>
+</blockquote>
+<a class="header" href="#a-little-c-with-your-rust" id="a-little-c-with-your-rust"><h1>A little C with your Rust</h1></a>
+<a class="header" href="#a-little-rust-with-your-c" id="a-little-rust-with-your-c"><h1>A little Rust with your C</h1></a>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+
+        
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+
+        
+        
+        <script type="text/javascript">
+        window.addEventListener('load', function() {
+            window.setTimeout(window.print, 100);
+        });
+        </script>
+        
+        
+
+    </body>
+</html>
